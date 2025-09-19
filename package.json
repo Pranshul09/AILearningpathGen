@@ -1,3 +1,4 @@
+"homepage": "https://<username>.github.io/<repo-name>"
 {
   "name": "vite-react-typescript-starter",
   "private": true,
