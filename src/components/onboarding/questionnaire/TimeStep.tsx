@@ -1,21 +1,46 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../../store/useAppStore';
 import { Button } from '../../ui/Button';
 
 interface TimeStepProps {
   onNext: () => void;
   onBack: () => void;
+  isLast?: boolean;
 }
 
-export const TimeStep: React.FC<TimeStepProps> = ({ onNext, onBack }) => {
+export const TimeStep: React.FC<TimeStepProps> = ({ onNext, onBack, isLast = false }) => {
   const { onboardingData, updateOnboardingData } = useAppStore();
   const [dailyFreeTime, setDailyFreeTime] = useState(onboardingData.dailyFreeTime || 1);
+  const navigate = useNavigate();
 
   const handleNext = () => {
     updateOnboardingData({ dailyFreeTime });
-    onNext();
+    if (isLast) {
+      // Create basic user profile and redirect to ViewFullPath
+      const user = {
+        id: crypto.randomUUID(),
+        name: onboardingData.name || 'User',
+        degree: onboardingData.degree || '',
+        currentYear: '',
+        targetRole: '',
+        currentSkills: [],
+        dailyFreeTime,
+        studyHours: [],
+        constraints: [],
+        resumeUploaded: false,
+        xp: 0,
+        streak: 0,
+        createdAt: new Date().toISOString(),
+      };
+      
+      useAppStore.getState().setUser(user);
+      navigate('/view-full-path');
+    } else {
+      onNext();
+    }
   };
 
   const timeOptions = [
@@ -81,7 +106,7 @@ export const TimeStep: React.FC<TimeStepProps> = ({ onNext, onBack }) => {
           Back
         </Button>
         <Button onClick={handleNext} className="flex-1">
-          Continue
+          {isLast ? 'Get Started' : 'Continue'}
         </Button>
       </div>
     </motion.div>

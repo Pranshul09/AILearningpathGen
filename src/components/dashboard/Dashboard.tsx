@@ -11,6 +11,7 @@ import {
   BookOpen,
   BarChart3
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../store/useAppStore';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -18,6 +19,7 @@ import { AppLayout } from '../layout/AppLayout';
 
 export const Dashboard: React.FC = () => {
   const { user, learningPath, completeTask } = useAppStore();
+  const navigate = useNavigate();
 
   if (!user || !learningPath) {
     return (
@@ -219,6 +221,7 @@ export const Dashboard: React.FC = () => {
             <Button
               variant="secondary"
               className="h-20 flex-col"
+              onClick={() => navigate('/view-full-path')}
             >
               <BookOpen className="w-6 h-6 mb-2" />
               <span>View Full Path</span>
@@ -227,6 +230,7 @@ export const Dashboard: React.FC = () => {
             <Button
               variant="secondary"
               className="h-20 flex-col"
+              onClick={() => navigate('/adjust-schedule')}
             >
               <Settings className="w-6 h-6 mb-2" />
               <span>Adjust Schedule</span>
